@@ -32,7 +32,7 @@ export class SidebarComponent {
       if(indexSubMenu < this.activeMenuPath.length-1 && this.activeMenuPath[indexSubMenu].title !== newPath[0].title && newPath[0].items && newPath[0].items.length > 0) {
         newValues = [...this.activeMenuPath.slice(0,indexSubMenu+1),...newPath];
       }else if(newPath[0].items && newPath[0].items.length > 0){
-        newValues = [...this.activeMenuPath.slice(0,this.activeMenuPath.length),...newPath]; 
+        newValues = [...this.activeMenuPath.slice(0,this.activeMenuPath.length),...newPath];
       }else{
 
       }
@@ -41,7 +41,8 @@ export class SidebarComponent {
     }
   }
   getSidebarClass(): string{
-    return `sidebar ${this.activeMenuPath.length>0? 'sidebar-extended' : ''} ${this.hideHeader? 'hideHeader' : ''}`;
+    //return `sidebar ${this.hideHeader ? 'hideHeader' : ''}`;
+     return `sidebar ${this.activeMenuPath.length>0? 'sidebar-extended' : ''} ${this.hideHeader? 'hideHeader' : ''}`;
   }
   onCloseSidebar(): void{
     this.onRestart();

@@ -27,7 +27,7 @@ export class AppService implements OnDestroy {
         private msalBroadcastService: MsalBroadcastService
     ) {
         this.subscribeToMsalEvents();
-        this.initializeSession();   
+        this.initializeSession();
     }
     ngOnDestroy(): void {
       this._destroying$.next(undefined);
@@ -40,7 +40,7 @@ export class AppService implements OnDestroy {
 
     private subscribeToMsalEvents(): void {
         this.msalService.handleRedirectObservable().subscribe();
-        this.msalService.instance.enableAccountStorageEvents(); 
+        this.msalService.instance.enableAccountStorageEvents();
         this.msalBroadcastService.msalSubject$.pipe().subscribe((result: EventMessage)=>{
             //Logger.info("Event AAD Detected:", result.eventType);
         })
@@ -55,14 +55,14 @@ export class AppService implements OnDestroy {
         })
         this.msalService.instance.addEventCallback((event: EventMessage) => {//Escucha los eventos login
             if (
-                event.eventType === EventType.LOGIN_START || 
+                event.eventType === EventType.LOGIN_START ||
                 event.eventType === EventType.ACQUIRE_TOKEN_START
             ) {
                 this.isLoadingAD.set(true);
             } else if (
-                event.eventType === EventType.LOGIN_SUCCESS || 
-                event.eventType === EventType.LOGIN_FAILURE || 
-                event.eventType === EventType.ACQUIRE_TOKEN_SUCCESS || 
+                event.eventType === EventType.LOGIN_SUCCESS ||
+                event.eventType === EventType.LOGIN_FAILURE ||
+                event.eventType === EventType.ACQUIRE_TOKEN_SUCCESS ||
                 event.eventType === EventType.ACQUIRE_TOKEN_FAILURE
             ) {
                 this.isLoadingAD.set(false);
@@ -76,7 +76,7 @@ export class AppService implements OnDestroy {
         //Logger.info("checkAndSetActiveAccount", {activeAccount,activeAccounts})
         if (
             !activeAccount &&
-            activeAccounts.length > 0 
+            activeAccounts.length > 0
         ) {
             this.setActiveAccount(activeAccounts[0]);
         }else if(!this.activeAccount()) {
@@ -128,8 +128,23 @@ export class AppService implements OnDestroy {
         }
         return isDark ? "dark" : this.navbarType();
     }
-  
+
     public loginRedirect() {
+
+      const mockAccount: AccountInfo = {
+        homeAccountId: 'mock-home-account-id',
+        environment: 'mock-environment',
+        tenantId: 'mock-tenant-id',
+        username: 'nem-gcabrera@coppel.com',
+        localAccountId: 'mock-local-account-id',
+        name: 'Gilberto Cabrera Vargas'
+    };
+
+    this.setActiveAccount(mockAccount); // Simula que el usuario se autenticó
+    window.location.pathname = '/protected'; // Redirige a la ruta protegida
+
+
+
 
     //     console.log("msalGuardConfig ===> ", {...this.msalGuardConfig.authRequest} as RedirectRequest);
 
@@ -141,7 +156,7 @@ export class AppService implements OnDestroy {
     //     this.msalService.loginRedirect();
     //   }
 
-        this.msalService.loginRedirect();
+        // this.msalService.loginRedirect();
     }
 
     /*public showUserInfoAAD() {

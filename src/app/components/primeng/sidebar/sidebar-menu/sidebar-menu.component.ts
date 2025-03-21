@@ -4,6 +4,7 @@ import { AppService } from '../../../../services/app.service';
 import { SidebarMenuItem } from '../../../../app.interfaces';
 import { SvgComponent } from '../../svg/svg.component';
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 type IndexSubMenu = number | undefined;
 type OnMenuChangeExtended = (newMenuPath: SidebarMenuItem[],indexSubMenu: number)=>void;
@@ -25,10 +26,14 @@ export class SidebarMenuComponent {
   public ArrowRightIconPath: string = "assets/icons/Actions.arrowright.flechaderecha.svg";
   constructor(
     public appService: AppService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router // Inyectar el servicio Router
   ){ }
-  public getIconClass(icon:string|undefined) {
-    return `clt-icon-${icon} sidebarIcon`;
+  // public getIconClass(icon:string|undefined) {
+  //   return `clt-icon-${icon} sidebarIcon`;
+  // }
+  public getIconClass(icon: string | undefined): string {
+    return `${icon} sidebarIcon`;
   }
   private isSelected(item: SidebarMenuItem, items: SidebarMenuItem[] = this.activeMenuPath): boolean {
     for (let element of items) {
@@ -38,31 +43,38 @@ export class SidebarMenuComponent {
         return true;
       }
     }
-  
+
     return false;
   }
   public getItemClass(item: SidebarMenuItem): string {
-    return `menuItem ${this.indexSubMenu !== undefined ? 'submenuList' : ''} ${ this.isSelected(item) ? ' selected-title':''}`; 
-  } 
+    return `menuItem ${this.indexSubMenu !== undefined ? 'submenuList' : ''} ${ this.isSelected(item) ? ' selected-title':''}`;
+  }
+
+
   handleClickItem(item: SidebarMenuItem): void {
-    if( (this.indexSubMenu) && this.onMenuChange && item.items && item.items.length>0 ) {
-      this.onMenuChange([...this.activeMenuPath,item]);
-    }else if( !this.indexSubMenu && this.onMenuChange ) {
-      this.onMenuChange([item])
-    }else if((
-      this.indexSubMenu !== undefined && this.indexSubMenu >= 0 && 
-      item.items && 
-      item.items.length > 0
-    ) && 
-        !this.isSelected(item) && this.onMenuChangeExtended) {
-          
-          this.onMenuChangeExtended([item],this.indexSubMenu);
-    }else{
-      this.messageService.add({ 
-        severity: "info", 
-        summary: "Clicked", 
-        detail: `Fake redirect to: '${item.to}'`, 
-        icon: item.icon 
+
+    console.log(`Item clicked: ${item.title}`);
+    if ((this.indexSubMenu) && this.onMenuChange && item.items && item.items.length > 0) {
+      this.onMenuChange([...this.activeMenuPath, item]);
+    } else if (!this.indexSubMenu && this.onMenuChange) {
+      this.onMenuChange([item]);
+    } else if (
+      (this.indexSubMenu !== undefined && this.indexSubMenu >= 0 &&
+        item.items &&
+        item.items.length > 0) &&
+      !this.isSelected(item) && this.onMenuChangeExtended
+    ) {
+      this.onMenuChangeExtended([item], this.indexSubMenu);
+    } else if (item.to) {
+      // Navegar a la ruta especificada en el atributo `to`
+      console.log(`Navigating to: ${item.to}`);
+      this.router.navigate([item.to]);
+    } else {
+      this.messageService.add({
+        severity: "info",
+        summary: "Clicked",
+        detail: `No route defined for: '${item.title}'`,
+        icon: item.icon
       });
     }
   }

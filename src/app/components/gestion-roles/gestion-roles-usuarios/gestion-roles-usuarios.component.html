@@ -1,0 +1,54 @@
+<div class="breadcrumb-container">
+  <div class="breadcrumb">
+    Inicio &gt; Operación en CEDIS &gt; Entrada de Mercancías &gt; Traslado &gt; Carretas a Traslado
+  </div>
+</div>
+
+<div class="content-container">
+  <div class="card">
+    <div class="card-header">
+      <div class="title-container">
+        <div class="icon-container">
+          <img src="assets/icons/004.png" alt="Usuarios" class="icon">
+        </div>
+        
+        <h2>Gestión de roles y usuarios</h2>
+      </div>
+      <p class="subtitle">Selecciona la solución y luego el sistema para ver la lista de roles disponibles</p>
+      
+    </div>
+    <br>
+    <div class="form-container">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="solucion">Solución</label>
+          <p-dropdown id="solucion" 
+                     [options]="solucionesOptions" 
+                     [(ngModel)]="selectedSolucion" 
+                     (onChange)="onSolucionChange($event)" 
+                     placeholder="Selecciona una Solución"
+                     optionLabel="name"
+                     [style]="{'width':'100%'}"></p-dropdown>
+        </div>
+
+        <div class="form-group">
+          <label for="sistema">Sistema</label>
+          <p-dropdown id="sistema" 
+                     [options]="sistemasOptions" 
+                     [(ngModel)]="selectedSistema" 
+                     placeholder="Selecciona un Sistema"
+                     optionLabel="name"
+                     [style]="{'width':'100%'}"
+                     [disabled]="!selectedSolucion"></p-dropdown>
+        </div>
+
+        <div class="form-group button-container">
+          <button class="btn-add-role">
+            <span class="plus-icon">+</span>
+            Agregar nuevo rol
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
